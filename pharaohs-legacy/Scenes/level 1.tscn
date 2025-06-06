@@ -1,3 +1,19 @@
-[gd_scene format=3 uid="uid://brwnopuep2pkw"]
+[gd_scene load_steps=3 format=3 uid="uid://brwnopuep2pkw"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mukua"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tqgmy"]
 
 [node name="Level1" type="Node2D"]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+shape = SubResource("RectangleShape2D_mukua")
+
+[node name="CharacterBody2D" type="CharacterBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D"]
+shape = SubResource("RectangleShape2D_tqgmy")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CharacterBody2D"]
