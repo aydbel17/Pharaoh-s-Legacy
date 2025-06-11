@@ -1,191 +1,152 @@
 extends CharacterBody2D
-# Movement parameters
-@export var move_speed: float = 200.0
-@export var dash_speed: float = 600.0
-@export var jump_velocity: float = -400.0
-@export var roll_speed: float = 300.0
-@export var dash_duration: float = 0.2
-@export var dash_cooldown: float = 1.0
-@export var roll_duration: float = 0.4
-@export var roll_cooldown: float = 1.0
 
-# Gravity
-var gravity: float = ProjectSettings.get_setting("physics/2d/default_gravity")
+enum State { IDLE, RUNNING, JUMPING, FALLING, DASHING, SLIDING, CROUCHING }
 
-# State variables
-enum State { IDLE, RUNNING, JUMPING, DASHING, ROLLING }
+@export var input_left: String = "ui_left"
+@export var input_right: String = "ui_right"
+@export var input_jump: String = "ui_accept"
+@export var input_dash: String = "ui_select"
+@export var input_crouch: String = "ui_down"
+
+@export var speed: float = 300.0
+@export var jump_velocity: float = -800.0
+@export var dash_speed: float = 1000.0
+@export var dash_time: float = 1
+@export var slide_time: float = 1
+
+var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 var current_state: State = State.IDLE
-var is_facing_right: bool = true
+var can_double_jump: bool = false
+var has_double_jumped: bool = false
 var dash_timer: float = 0.0
-var dash_cooldown_timer: float = 0.0
-var roll_timer: float = 0.0
-var roll_cooldown_timer: float = 0.0
 var dash_direction: Vector2 = Vector2.ZERO
+var slide_timer: float = 0.0
 
-# Node references (assuming an AnimatedSprite2D for animations)
-@onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
+@onready var normal_collision = $NormalCollision
+@onready var crouch_collision = $CrouchCollision
+@onready var animated_sprite = $AnimatedSprite2D
 
-func _physics_process(delta: float) -> void:
-	# Handle state transitions and movement
-	match current_state:
-		State.IDLE:
-			_handle_idle_state(delta)
-		State.RUNNING:
-			_handle_running_state(delta)
-		State.JUMPING:
-			_handle_jumping_state(delta)
-		State.DASHING:
-			_handle_dashing_state(delta)
-		State.ROLLING:
-			_handle_rolling_state(delta)
-	
-	# Apply gravity when not on floor
+func _ready():
+	crouch_collision.disabled = true
+
+func _physics_process(delta):
 	if not is_on_floor():
 		velocity.y += gravity * delta
 	
-	# Update timers
-	_update_timers(delta)
-	
-	# Move the character
+	handle_input()
+	update_movement()
+	play_animation()
 	move_and_slide()
-	
-	# Update sprite facing direction
-	_update_sprite_direction()
 
-func _handle_idle_state(delta: float) -> void:
-	# Play idle animation
-	sprite.play("Idle")
+func handle_input():
+	var moving = Input.is_action_pressed(input_left) or Input.is_action_pressed(input_right)
+	var crouching = Input.is_action_pressed(input_crouch)
 	
-	# Decelerate horizontal movement
-	velocity.x = move_toward(velocity.x, 0, move_speed)
-	
-	# Check for movement input
-	var direction: float = _get_input_direction()
-	if direction != 0:
-		current_state = State.RUNNING
-		return
-	
-	# Check for jump
-	if Input.is_action_just_pressed("Jump") and is_on_floor():
-		current_state = State.JUMPING
-		velocity.y = jump_velocity
-		sprite.play("Jump")
-		return
-	
-	# Check for dash
-	if Input.is_action_just_pressed("Dash") and dash_cooldown_timer <= 0:
-		current_state = State.DASHING
-		dash_timer = dash_duration
-		dash_direction = Vector2(direction if direction != 0 else (1 if is_facing_right else -1), 0)
-		sprite.play("Dash")
-		return
-	
-	# Check for roll
-	if Input.is_action_just_pressed("Roll") and roll_cooldown_timer <= 0 and is_on_floor():
-		current_state = State.ROLLING
-		roll_timer = roll_duration
-		sprite.play("Roll")
-		return
+	match current_state:
+		State.IDLE, State.RUNNING:
+			if not is_on_floor():
+				current_state = State.FALLING
+			elif Input.is_action_just_pressed(input_jump):
+				jump()
+			elif Input.is_action_just_pressed(input_dash):
+				start_dash()
+			elif crouching and moving:
+				start_slide()
+			elif crouching:
+				start_crouch()
+			elif moving:
+				current_state = State.RUNNING
+			else:
+				current_state = State.IDLE
+		
+		State.JUMPING, State.FALLING:
+			if Input.is_action_just_pressed(input_jump) and can_double_jump:
+				double_jump()
+			elif Input.is_action_just_pressed(input_dash):
+				start_dash()
+			elif is_on_floor():
+				current_state = State.IDLE if abs(velocity.x) < 10 else State.RUNNING
+		
+		State.DASHING:
+			dash_timer -= get_physics_process_delta_time()
+			if dash_timer <= 0:
+				current_state = State.FALLING if not is_on_floor() else State.IDLE
+		
+		State.SLIDING:
+			slide_timer -= get_physics_process_delta_time()
+			if slide_timer <= 0 or not crouching or not is_on_floor():
+				end_crouch()
+				current_state = State.FALLING if not is_on_floor() else State.IDLE
+		
+		State.CROUCHING:
+			if Input.is_action_just_pressed(input_jump):
+				end_crouch()
+				jump()
+			elif not crouching or not is_on_floor():
+				end_crouch()
+				current_state = State.FALLING if not is_on_floor() else State.IDLE
 
-func _handle_running_state(delta: float) -> void:
-	# Play running animation
-	sprite.play("Run")
+func update_movement():
+	var direction = Input.get_axis(input_left, input_right)
 	
-	# Get input direction
-	var direction: float = _get_input_direction()
-	
-	# Move horizontally
-	velocity.x = direction * move_speed
-	
-	# Transition to idle if no input
+	match current_state:
+		State.IDLE:
+			velocity.x = 0 # Instant stop
+		State.RUNNING:
+			velocity.x = direction * speed # Instant full speed
+			animated_sprite.flip_h = direction < 0
+		State.JUMPING, State.FALLING:
+			velocity.x = direction * speed # Instant full speed or stop
+			if direction != 0:
+				animated_sprite.flip_h = direction < 0
+		State.DASHING:
+			velocity = dash_direction * dash_speed # Dash remains unchanged
+		State.SLIDING:
+			velocity.x = 0 # No movement during slide
+		State.CROUCHING:
+			velocity.x = 0 # No movement while crouching
+
+func play_animation():
+	match current_state:
+		State.IDLE: animated_sprite.play("Idle")
+		State.RUNNING: animated_sprite.play("Run")
+		State.JUMPING: animated_sprite.play("Jump")
+		State.DASHING: animated_sprite.play("Dash")
+		State.SLIDING: animated_sprite.play("Slide")
+		State.CROUCHING: animated_sprite.play("Crouch")
+
+func jump():
+	velocity.y = jump_velocity
+	can_double_jump = true
+	has_double_jumped = false
+	current_state = State.JUMPING
+
+func double_jump():
+	velocity.y = jump_velocity * 0.8
+	has_double_jumped = true
+	can_double_jump = false
+
+func start_dash():
+	var direction = Input.get_axis(input_left, input_right)
 	if direction == 0:
-		current_state = State.IDLE
-		return
-	
-	# Check for jump
-	if Input.is_action_just_pressed("Jump") and is_on_floor():
-		current_state = State.JUMPING
-		velocity.y = jump_velocity
-		sprite.play("Jump")
-		return
-	
-	# Check for dash
-	if Input.is_action_just_pressed("Dash") and dash_cooldown_timer <= 0:
-		current_state = State.DASHING
-		dash_timer = dash_duration
-		dash_direction = Vector2(direction if direction != 0 else (1 if is_facing_right else -1), 0)
-		sprite.play("Dash")
-		return
-	
-	# Check for roll
-	if Input.is_action_just_pressed("Roll") and roll_cooldown_timer <= 0 and is_on_floor():
-		current_state = State.ROLLING
-		roll_timer = roll_duration
-		sprite.play("Roll")
-		return
+		direction = 1 if not animated_sprite.flip_h else -1 # Use facing direction as fallback
+	dash_direction = Vector2(direction, 0)
+	dash_timer = dash_time
+	current_state = State.DASHING
 
-func _handle_jumping_state(delta: float) -> void:
-	# Play jump animation (already set on jump start)
-	
-	# Get input direction for air control
-	var direction: float = _get_input_direction()
-	velocity.x = direction * move_speed
-	
-	# Transition to idle or running when landing
+func start_slide():
 	if is_on_floor():
-		current_state = State.IDLE if direction == 0 else State.RUNNING
-		sprite.play("Idle" if direction == 0 else "Run")
-		return
-	
-	# Check for dash
-	if Input.is_action_just_pressed("Dash") and dash_cooldown_timer <= 0:
-		current_state = State.DASHING
-		dash_timer = dash_duration
-		dash_direction = Vector2(direction if direction != 0 else (1 if is_facing_right else -1), 0)
-		sprite.play("Dash")
-		return
+		normal_collision.disabled = true
+		crouch_collision.disabled = false
+		slide_timer = slide_time
+		current_state = State.SLIDING
 
-func _handle_dashing_state(delta: float) -> void:
-	# Apply dash velocity
-	velocity = dash_direction * dash_speed
-	
-	# End dash when timer expires
-	if dash_timer <= 0:
-		current_state = State.JUMPING if not is_on_floor() else State.IDLE
-		dash_cooldown_timer = dash_cooldown
-		sprite.play("Jump" if not is_on_floor() else "Idle")
-		velocity.x = 0
+func start_crouch():
+	if is_on_floor():
+		normal_collision.disabled = true
+		crouch_collision.disabled = false
+		current_state = State.CROUCHING
 
-func _handle_rolling_state(delta: float) -> void:
-	# Apply roll velocity
-	var direction: float = 1 if is_facing_right else -1
-	velocity.x = direction * roll_speed
-	
-	# End roll when timer expires
-	if roll_timer <= 0:
-		current_state = State.IDLE
-		roll_cooldown_timer = roll_cooldown
-		sprite.play("Idle")
-		velocity.x = 0
-
-func _get_input_direction() -> float:
-	return Input.get_axis("move_left", "move_right")
-
-func _update_timers(delta: float) -> void:
-	# Update dash timer
-	if dash_timer > 0:
-		dash_timer -= delta
-	if dash_cooldown_timer > 0:
-		dash_cooldown_timer -= delta
-	
-	# Update roll timer
-	if roll_timer > 0:
-		roll_timer -= delta
-	if roll_cooldown_timer > 0:
-		roll_cooldown_timer -= delta
-
-func _update_sprite_direction() -> void:
-	var direction: float = _get_input_direction()
-	if direction != 0:
-		is_facing_right = direction > 0
-	sprite.flip_h = not is_facing_right
+func end_crouch():
+	normal_collision.disabled = false
+	crouch_collision.disabled = true

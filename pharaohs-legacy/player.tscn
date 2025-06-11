@@ -1,7 +1,19 @@
-[gd_scene load_steps=28 format=3 uid="uid://cogcexo23cyy6"]
+[gd_scene load_steps=30 format=3 uid="uid://cogcexo23cyy6"]
 
 [ext_resource type="Texture2D" uid="uid://dl6rff7bflx7c" path="res://Character Sprite/Archaeologist Sprite Sheet.png" id="1_4flbx"]
 [ext_resource type="Script" uid="uid://d3107s35w2e8f" path="res://player.gd" id="1_onrkg"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_onrkg"]
+atlas = ExtResource("1_4flbx")
+region = Rect2(0, 0, 64, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_i3pqv"]
+atlas = ExtResource("1_4flbx")
+region = Rect2(64, 192, 64, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hqtel"]
+atlas = ExtResource("1_4flbx")
+region = Rect2(448, 0, 64, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_knibt"]
 atlas = ExtResource("1_4flbx")
@@ -51,14 +63,6 @@ region = Rect2(320, 64, 64, 32)
 atlas = ExtResource("1_4flbx")
 region = Rect2(64, 32, 64, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_3sh3m"]
-atlas = ExtResource("1_4flbx")
-region = Rect2(128, 32, 64, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_nmmbu"]
-atlas = ExtResource("1_4flbx")
-region = Rect2(192, 32, 64, 32)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_7oyl7"]
 atlas = ExtResource("1_4flbx")
 region = Rect2(64, 192, 64, 32)
@@ -99,6 +103,20 @@ region = Rect2(448, 32, 64, 32)
 animations = [{
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_onrkg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_i3pqv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hqtel")
+}],
+"loop": true,
+"name": &"Crouch",
+"speed": 3.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_knibt")
 }, {
 "duration": 1.0,
@@ -113,7 +131,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_npedx")
 }],
-"loop": true,
+"loop": false,
 "name": &"Dash",
 "speed": 9.0
 }, {
@@ -124,9 +142,14 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_vf57n")
 }],
-"loop": true,
+"loop": false,
 "name": &"Death",
 "speed": 2.0
+}, {
+"frames": [],
+"loop": false,
+"name": &"Fall",
+"speed": 5.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -148,15 +171,9 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_orgs1")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_3sh3m")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_nmmbu")
 }],
-"loop": true,
-"name": &"Jumping",
+"loop": false,
+"name": &"Jump",
 "speed": 4.0
 }, {
 "frames": [{
@@ -178,7 +195,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_nc15n")
 }],
-"loop": true,
+"loop": false,
 "name": &"Roll",
 "speed": 6.0
 }, {
@@ -193,13 +210,16 @@ animations = [{
 "texture": SubResource("AtlasTexture_45goc")
 }],
 "loop": true,
-"name": &"Running",
+"name": &"Run",
 "speed": 12.0
 }]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_i3pqv"]
-radius = 5.0
-height = 16.0
+radius = 6.0
+height = 22.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_onrkg"]
+radius = 7.28011
 
 [node name="Player" type="CharacterBody2D"]
 position = Vector2(37, 27)
@@ -210,14 +230,18 @@ texture_filter = 1
 position = Vector2(2, -2)
 scale = Vector2(1.03125, 1.03125)
 sprite_frames = SubResource("SpriteFrames_onrkg")
-animation = &"Running"
-frame_progress = 0.760044
+animation = &"Idle"
+autoplay = "Idle"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(1, 1)
+[node name="NormalCollision" type="CollisionShape2D" parent="."]
+position = Vector2(1, 3)
 shape = SubResource("CapsuleShape2D_i3pqv")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(1, 1)
 position_smoothing_enabled = true
 rotation_smoothing_enabled = true
+
+[node name="CrouchCollision" type="CollisionShape2D" parent="."]
+position = Vector2(1, 7)
+shape = SubResource("CircleShape2D_onrkg")
