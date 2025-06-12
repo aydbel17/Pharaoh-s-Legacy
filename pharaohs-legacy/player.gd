@@ -11,8 +11,8 @@ enum State { IDLE, RUNNING, JUMPING, FALLING, DASHING, SLIDING, CROUCHING }
 @export var speed: float = 300.0
 @export var jump_velocity: float = -800.0
 @export var dash_speed: float = 1000.0
-@export var dash_time: float = 1
-@export var slide_time: float = 1
+@export var dash_time: float = 0.2
+@export var slide_time: float = 0.4
 
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 var current_state: State = State.IDLE
@@ -20,7 +20,7 @@ var can_double_jump: bool = false
 var has_double_jumped: bool = false
 var dash_timer: float = 0.0
 var dash_direction: Vector2 = Vector2.ZERO
-var slide_timer: float = 0.0
+var slide_timer: float = 500.0
 
 @onready var normal_collision = $NormalCollision
 @onready var crouch_collision = $CrouchCollision
@@ -102,7 +102,8 @@ func update_movement():
 		State.DASHING:
 			velocity = dash_direction * dash_speed # Dash remains unchanged
 		State.SLIDING:
-			velocity.x = 0 # No movement during slide
+			velocity.x = slide_direction * slide_speed
+			animated_sprite.flip_h = slide_direction < 0
 		State.CROUCHING:
 			velocity.x = 0 # No movement while crouching
 
