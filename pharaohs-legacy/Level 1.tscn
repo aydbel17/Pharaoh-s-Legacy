@@ -403,13 +403,3 @@ layer_0/tile_data = PackedInt32Array(65536, 393216, 5, 131072, 393216, 6, 196608
 
 [node name="Player" parent="." instance=ExtResource("3_gvvdy")]
 position = Vector2(-37, -88)
-input_left = null
-input_right = null
-input_jump = null
-input_dash = null
-input_crouch = null
-speed = 150.0
-jump_velocity = -350.0
-dash_speed = 500.0
-dash_time = null
-slide_time = null

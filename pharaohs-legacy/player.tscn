@@ -210,16 +210,6 @@ radius = 7.28011
 [node name="Player" type="CharacterBody2D"]
 position = Vector2(37, 27)
 script = ExtResource("1_onrkg")
-input_left = null
-input_right = null
-input_jump = null
-input_dash = null
-input_crouch = null
-speed = null
-jump_velocity = null
-dash_speed = null
-dash_time = null
-slide_time = null
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
