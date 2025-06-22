@@ -197,7 +197,7 @@ animations = [{
 }],
 "loop": false,
 "name": &"Slide",
-"speed": 6.0
+"speed": 12.0
 }]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_i3pqv"]
