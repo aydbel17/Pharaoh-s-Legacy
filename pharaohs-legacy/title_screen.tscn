@@ -22,12 +22,12 @@ grow_vertical = 2
 texture = ExtResource("1_v6p8y")
 expand_mode = 2
 
-[node name="TitleLabel" type="Label" parent="."]
+[node name="TitleLabel" type="Label" parent="Background"]
 layout_mode = 0
-offset_left = 349.0
-offset_top = 78.0
-offset_right = 1160.0
-offset_bottom = 400.0
+offset_left = 255.0
+offset_top = 52.0
+offset_right = 870.0
+offset_bottom = 256.0
 
 [node name="MenuButtons" type="VBoxContainer" parent="."]
 layout_mode = 0
