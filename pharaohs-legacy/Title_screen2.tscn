@@ -1,7 +1,10 @@
-[gd_scene load_steps=3 format=3 uid="uid://bg1hhomlfyrik"]
+[gd_scene load_steps=6 format=3 uid="uid://bg1hhomlfyrik"]
 
 [ext_resource type="Texture2D" uid="uid://dfi7w7w42tvf7" path="res://Level design/ChatGPT Image Jun 17, 2025, 01_17_04 PM.png" id="1_kidfe"]
 [ext_resource type="Texture2D" uid="uid://celdi3nq46l1q" path="res://Level design/ChatGPT Image Jun 24, 2025, 10_53_26 AM.png" id="2_2pkpn"]
+[ext_resource type="Texture2D" uid="uid://dcavqwkc2pfvm" path="res://Level design/ChatGPT Image Jun 25, 2025, 10_53_26 AM.png" id="2_uhnsl"]
+[ext_resource type="Texture2D" uid="uid://ctb52vwj24w3c" path="res://Level design/Screenshot 2025-06-25 105914.png" id="4_5aqh0"]
+[ext_resource type="Texture2D" uid="uid://d3akut6gkvdya" path="res://Level design/ChatGPT Image Jun 26, 2025, 10_53_26 AM.png" id="5_5aqh0"]
 
 [node name="Title Screen" type="Control"]
 layout_mode = 3
@@ -21,18 +24,40 @@ grow_vertical = 2
 texture = ExtResource("1_kidfe")
 expand_mode = 3
 
-[node name="TextureButton" type="TextureButton" parent="."]
+[node name="Exit" type="TextureButton" parent="."]
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_left = 436.0
+offset_top = 494.0
+offset_right = 670.0
+offset_bottom = 605.0
+texture_normal = ExtResource("2_uhnsl")
 
 [node name="Title" type="TextureRect" parent="."]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -414.0
-offset_right = 414.0
-offset_bottom = 340.0
+offset_left = -328.0
+offset_top = 45.0
+offset_right = 301.0
+offset_bottom = 263.0
 grow_horizontal = 2
 texture = ExtResource("2_2pkpn")
+expand_mode = 1
+
+[node name="Options" type="TextureButton" parent="."]
+layout_mode = 0
+offset_left = 422.0
+offset_top = 394.0
+offset_right = 677.0
+offset_bottom = 487.0
+texture_normal = ExtResource("4_5aqh0")
+stretch_mode = 0
+
+[node name="Start Game" type="TextureButton" parent="."]
+layout_mode = 0
+offset_left = 333.0
+offset_top = 268.0
+offset_right = 774.0
+offset_bottom = 388.0
+texture_normal = ExtResource("5_5aqh0")

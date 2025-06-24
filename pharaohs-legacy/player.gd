@@ -202,3 +202,4 @@ func end_crouch():
 	normal_collision.disabled = false
 	crouch_collision.disabled = true
 	print("Crouch ended")
+	

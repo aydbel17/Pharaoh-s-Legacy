@@ -216,7 +216,7 @@ texture_filter = 1
 position = Vector2(2, -2)
 scale = Vector2(1.03125, 1.03125)
 sprite_frames = SubResource("SpriteFrames_onrkg")
-animation = &"Slide"
+animation = &"Run"
 autoplay = "Idle"
 
 [node name="NormalCollision" type="CollisionShape2D" parent="."]
