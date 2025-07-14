@@ -29,7 +29,7 @@ layout_mode = 0
 offset_left = 436.0
 offset_top = 494.0
 offset_right = 670.0
-offset_bottom = 605.0
+offset_bottom = 600.0
 texture_normal = ExtResource("2_uhnsl")
 
 [node name="Title" type="TextureRect" parent="."]

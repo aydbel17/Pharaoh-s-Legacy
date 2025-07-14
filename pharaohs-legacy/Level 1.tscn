@@ -396,6 +396,7 @@ sources/0 = SubResource("TileSetAtlasSource_d1jbf")
 sources/1 = SubResource("TileSetAtlasSource_hi2wx")
 
 [node name="Tutorial" type="Node2D"]
+position = Vector2(63, -54)
 
 [node name="TileMap" type="TileMap" parent="."]
 tile_set = SubResource("TileSet_1xjbt")
@@ -406,4 +407,8 @@ layer_0/tile_data = PackedInt32Array(65536, 393216, 5, 131072, 393216, 6, 196608
 position = Vector2(-2, -4)
 
 [node name="PyramidDoor" type="Area2D" parent="."]
+position = Vector2(578, -8)
 script = ExtResource("4_d1jbf")
+
+[node name="RespawnPoint" type="Node2D" parent="."]
+position = Vector2(-49, -38)

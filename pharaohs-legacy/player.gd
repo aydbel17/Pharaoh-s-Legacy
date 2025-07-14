@@ -12,12 +12,14 @@ enum State { IDLE, RUNNING, JUMPING, FALLING, DASHING, SLIDING, CROUCHING }
 @export var jump_velocity: float = -350.0
 @export var dash_speed: float = 700.0
 @export var dash_time: float = 0.4
-@export var dash_cooldown: float = 2.0  # CHANGED: Increased to 2 seconds
+@export var dash_cooldown: float = 2.0
 @export var slide_speed: float = 600.0
 @export var slide_time: float = 0.4
 @export var slide_friction: float = 500.0
-@export var slide_cooldown: float = 1.5  # CHANGED: Increased to 1.5 seconds
+@export var slide_cooldown: float = 1.5
 @export var standstill_slide_factor: float = 0.5
+@export var death_y_threshold: float = 700.0  # Y position for respawn
+@export var respawn_point: Node2D  # Reference to RespawnPoint node
 
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 var current_state: State = State.IDLE
@@ -39,7 +41,11 @@ var slide_velocity: float = 0.0
 
 func _ready():
 	crouch_collision.disabled = true
-	print("Player initialized. NormalCollision: ", normal_collision, " CrouchCollision: ", crouch_collision, " AnimatedSprite: ", animated_sprite)
+	if respawn_point == null:
+		push_warning("RespawnPoint not assigned! Please set in the editor.")
+	else:
+		global_position = respawn_point.global_position  # Start at respawn point
+	print("Player initialized. NormalCollision: ", normal_collision, " CrouchCollision: ", crouch_collision, " AnimatedSprite: ", animated_sprite, " RespawnPoint: ", respawn_point)
 
 func _physics_process(delta: float):
 	if not is_on_floor() and current_state != State.DASHING:
@@ -55,11 +61,15 @@ func _physics_process(delta: float):
 		if dash_cooldown_timer <= 0:
 			can_dash = true
 	
+	# Check for falling below Y=700
+	if global_position.y > death_y_threshold:
+		respawn()
+	
 	handle_input(delta)
 	update_movement(delta)
 	play_animation()
 	move_and_slide()
-	print("Physics tick. State: ", State.keys()[current_state], " Delta: ", delta, " Position: ", position, " Velocity: ", velocity)
+	print("Physics tick. State: ", State.keys()[current_state], " Delta: ", delta, " Position: ", global_position, " Velocity: ", velocity)
 
 func handle_input(delta: float):
 	var moving = Input.is_action_pressed(input_left) or Input.is_action_pressed(input_right)
@@ -97,16 +107,17 @@ func handle_input(delta: float):
 					current_state = State.RUNNING if abs(Input.get_axis(input_left, input_right)) > 0 else State.IDLE
 				else:
 					current_state = State.FALLING
-				print("Dash ended. Distance traveled: ", position.x)
+				print("Dash ended. Distance traveled: ", global_position.x)
 		
 		State.SLIDING:
+			slide/window_size_ratio: 2
 			slide_timer -= delta
 			if slide_timer <= 0 or not crouching or not is_on_floor():
 				end_crouch()
 				current_state = State.FALLING if not is_on_floor() else State.IDLE
 				can_slide = false
 				slide_cooldown_timer = slide_cooldown
-				print("Slide ended. Distance traveled: ", position.x)
+				print("Slide ended. Distance traveled: ", global_position.x)
 		
 		State.CROUCHING:
 			if Input.is_action_just_pressed(input_jump):
@@ -176,7 +187,7 @@ func start_dash():
 	can_dash = false
 	dash_cooldown_timer = dash_cooldown
 	current_state = State.DASHING
-	print("Dash started. Direction: ", dash_direction, " Timer: ", dash_timer, " Cooldown: ", dash_cooldown_timer, " Position: ", position.x)
+	print("Dash started. Direction: ", dash_direction, " Timer: ", dash_timer, " Cooldown: ", dash_cooldown_timer, " Position: ", global_position.x)
 
 func start_slide():
 	if is_on_floor():
@@ -189,7 +200,7 @@ func start_slide():
 		slide_velocity = target_speed
 		velocity.x = target_speed
 		current_state = State.SLIDING
-		print("Slide started. Direction: ", slide_direction, " Timer: ", slide_timer, " Velocity: ", velocity.x, " Position: ", position.x)
+		print("Slide started. Direction: ", slide_direction, " Timer: ", slide_timer, " Velocity: ", velocity.x, " Position: ", global_position.x)
 
 func start_crouch():
 	if is_on_floor():
@@ -202,4 +213,24 @@ func end_crouch():
 	normal_collision.disabled = false
 	crouch_collision.disabled = true
 	print("Crouch ended")
-	
+
+func respawn():
+	if respawn_point == null:
+		push_error("RespawnPoint not assigned! Cannot respawn.")
+		return
+	global_position = respawn_point.global_position
+	velocity = Vector2.ZERO
+	current_state = State.IDLE
+	dash_timer = 0.0
+	dash_cooldown_timer = 0.0
+	can_dash = true
+	slide_timer = 0.0
+	slide_cooldown_timer = 0.0
+	can_slide = true
+	has_double_jumped = false
+	can_double_jump = false
+	normal_collision.disabled = false
+	crouch_collision.disabled = true
+	animated_sprite.flip_h = false
+	animated_sprite.play("Idle")
+	print("Respawned at: ", global_position)
