@@ -45,6 +45,14 @@ grow_horizontal = 2
 texture = ExtResource("2_2pkpn")
 expand_mode = 1
 
+[node name="Start Game" type="TextureButton" parent="."]
+layout_mode = 0
+offset_left = 333.0
+offset_top = 268.0
+offset_right = 774.0
+offset_bottom = 388.0
+texture_normal = ExtResource("5_5aqh0")
+
 [node name="Options" type="TextureButton" parent="."]
 layout_mode = 0
 offset_left = 422.0
@@ -53,11 +61,3 @@ offset_right = 677.0
 offset_bottom = 487.0
 texture_normal = ExtResource("4_5aqh0")
 stretch_mode = 0
-
-[node name="Start Game" type="TextureButton" parent="."]
-layout_mode = 0
-offset_left = 333.0
-offset_top = 268.0
-offset_right = 774.0
-offset_bottom = 388.0
-texture_normal = ExtResource("5_5aqh0")

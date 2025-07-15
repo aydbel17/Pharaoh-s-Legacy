@@ -107,17 +107,16 @@ func handle_input(delta: float):
 					current_state = State.RUNNING if abs(Input.get_axis(input_left, input_right)) > 0 else State.IDLE
 				else:
 					current_state = State.FALLING
-				print("Dash ended. Distance traveled: ", global_position.x)
+				print("Dash ended. Distance traveled: " + str(global_position.x))
 		
 		State.SLIDING:
-			slide/window_size_ratio: 2
 			slide_timer -= delta
 			if slide_timer <= 0 or not crouching or not is_on_floor():
 				end_crouch()
 				current_state = State.FALLING if not is_on_floor() else State.IDLE
 				can_slide = false
 				slide_cooldown_timer = slide_cooldown
-				print("Slide ended. Distance traveled: ", global_position.x)
+				print("Slide ended. Distance traveled: " + str(global_position.x))
 		
 		State.CROUCHING:
 			if Input.is_action_just_pressed(input_jump):
@@ -218,6 +217,7 @@ func respawn():
 	if respawn_point == null:
 		push_error("RespawnPoint not assigned! Cannot respawn.")
 		return
+	print("Attempting respawn. Current position: ", global_position, " Respawn point: ", respawn_point.global_position)
 	global_position = respawn_point.global_position
 	velocity = Vector2.ZERO
 	current_state = State.IDLE
