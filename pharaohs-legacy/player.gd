@@ -1,5 +1,5 @@
 extends CharacterBody2D
-
+class_name Player
 enum State { IDLE, RUNNING, JUMPING, FALLING, DASHING, SLIDING, CROUCHING }
 
 @export var input_left: String = "ui_left"
@@ -107,7 +107,7 @@ func handle_input(delta: float):
 					current_state = State.RUNNING if abs(Input.get_axis(input_left, input_right)) > 0 else State.IDLE
 				else:
 					current_state = State.FALLING
-				print("Dash ended. Distance traveled: " + str(global_position.x))
+				print("Dash ended. Distance traveled: ", global_position.x)
 		
 		State.SLIDING:
 			slide_timer -= delta
@@ -116,7 +116,7 @@ func handle_input(delta: float):
 				current_state = State.FALLING if not is_on_floor() else State.IDLE
 				can_slide = false
 				slide_cooldown_timer = slide_cooldown
-				print("Slide ended. Distance traveled: " + str(global_position.x))
+				print("Slide ended. Distance traveled: ", global_position.x)
 		
 		State.CROUCHING:
 			if Input.is_action_just_pressed(input_jump):
@@ -217,7 +217,6 @@ func respawn():
 	if respawn_point == null:
 		push_error("RespawnPoint not assigned! Cannot respawn.")
 		return
-	print("Attempting respawn. Current position: ", global_position, " Respawn point: ", respawn_point.global_position)
 	global_position = respawn_point.global_position
 	velocity = Vector2.ZERO
 	current_state = State.IDLE
