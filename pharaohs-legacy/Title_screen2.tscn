@@ -1,5 +1,6 @@
-[gd_scene load_steps=6 format=3 uid="uid://bg1hhomlfyrik"]
+[gd_scene load_steps=7 format=3 uid="uid://bg1hhomlfyrik"]
 
+[ext_resource type="Script" uid="uid://b18sbj453pvmd" path="res://title_screen.gd" id="1_g6f6p"]
 [ext_resource type="Texture2D" uid="uid://dfi7w7w42tvf7" path="res://Level design/ChatGPT Image Jun 17, 2025, 01_17_04 PM.png" id="1_kidfe"]
 [ext_resource type="Texture2D" uid="uid://celdi3nq46l1q" path="res://Level design/ChatGPT Image Jun 24, 2025, 10_53_26 AM.png" id="2_2pkpn"]
 [ext_resource type="Texture2D" uid="uid://dcavqwkc2pfvm" path="res://Level design/ChatGPT Image Jun 25, 2025, 10_53_26 AM.png" id="2_uhnsl"]
@@ -13,6 +14,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_g6f6p")
 
 [node name="Background" type="TextureRect" parent="."]
 layout_mode = 1
@@ -23,14 +25,6 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("1_kidfe")
 expand_mode = 3
-
-[node name="Exit" type="TextureButton" parent="."]
-layout_mode = 0
-offset_left = 436.0
-offset_top = 494.0
-offset_right = 670.0
-offset_bottom = 600.0
-texture_normal = ExtResource("2_uhnsl")
 
 [node name="Title" type="TextureRect" parent="."]
 layout_mode = 1
@@ -45,19 +39,26 @@ grow_horizontal = 2
 texture = ExtResource("2_2pkpn")
 expand_mode = 1
 
-[node name="Start Game" type="TextureButton" parent="."]
+[node name="Button" type="Button" parent="."]
 layout_mode = 0
-offset_left = 333.0
-offset_top = 268.0
-offset_right = 774.0
-offset_bottom = 388.0
-texture_normal = ExtResource("5_5aqh0")
+offset_left = 330.0
+offset_top = 267.0
+offset_right = 779.0
+offset_bottom = 395.0
+icon = ExtResource("5_5aqh0")
 
-[node name="Options" type="TextureButton" parent="."]
+[node name="Button2" type="Button" parent="."]
 layout_mode = 0
-offset_left = 422.0
-offset_top = 394.0
+offset_left = 443.0
+offset_top = 403.0
+offset_right = 671.0
+offset_bottom = 483.0
+icon = ExtResource("4_5aqh0")
+
+[node name="Button3" type="Button" parent="."]
+layout_mode = 0
+offset_left = 435.0
+offset_top = 496.0
 offset_right = 677.0
-offset_bottom = 487.0
-texture_normal = ExtResource("4_5aqh0")
-stretch_mode = 0
+offset_bottom = 610.0
+icon = ExtResource("2_uhnsl")
