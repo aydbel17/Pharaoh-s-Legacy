@@ -1,3 +1,15 @@
-[gd_scene format=3 uid="uid://ds21ojkxc85p8"]
+[gd_scene load_steps=2 format=3 uid="uid://ds21ojkxc85p8"]
 
-[node name="FirstLevelComplete" type="Node2D"]
+[ext_resource type="Texture2D" uid="uid://dfi7w7w42tvf7" path="res://Level design/ChatGPT Image Jun 17, 2025, 01_17_04 PM.png" id="1_7mkle"]
+
+[node name="FirstLevelComplete" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Background" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("1_7mkle")

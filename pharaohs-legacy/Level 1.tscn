@@ -414,7 +414,7 @@ layer_0/tile_data = PackedInt32Array(65536, 393216, 5, 131072, 393216, 6, 196608
 position = Vector2(-8, -97)
 script = ExtResource("4_d1jbf")
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="PyramidDoor"]
+[node name="PyramidDoorShape" type="CollisionPolygon2D" parent="PyramidDoor"]
 position = Vector2(451.273, 58.0001)
 polygon = PackedVector2Array(116.727, 49.9999, 149.727, 49.9999, 148.727, 15.9999, 117.727, 15.9999)
 
