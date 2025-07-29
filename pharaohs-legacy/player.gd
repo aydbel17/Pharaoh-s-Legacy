@@ -1,7 +1,7 @@
 extends CharacterBody2D
 class_name Player
 enum State { IDLE, RUNNING, JUMPING, FALLING, DASHING, SLIDING, CROUCHING }
-
+@onready var starting_pos = global_position
 @export var input_left: String = "ui_left"
 @export var input_right: String = "ui_right"
 @export var input_jump: String = "ui_accept"

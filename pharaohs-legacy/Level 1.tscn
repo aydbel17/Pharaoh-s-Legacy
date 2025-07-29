@@ -6,7 +6,7 @@
 [ext_resource type="Script" uid="uid://blaqbevk2vqf0" path="res://pyramid_door.gd" id="4_d1jbf"]
 [ext_resource type="Script" uid="uid://cbjvl8lte4jxj" path="res://respawn_barrier.gd" id="5_hi2wx"]
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_d1jbf"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_hi2wx"]
 texture = ExtResource("1_va7m3")
 0:0/0 = 0
 0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
@@ -323,7 +323,7 @@ texture = ExtResource("1_va7m3")
 5:5/0 = 0
 4:5/0 = 0
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_hi2wx"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_1xjbt"]
 texture = ExtResource("2_gvvdy")
 8:1/0 = 0
 7:2/0 = 0
@@ -393,8 +393,8 @@ texture = ExtResource("2_gvvdy")
 
 [sub_resource type="TileSet" id="TileSet_1xjbt"]
 physics_layer_0/collision_layer = 1
-sources/0 = SubResource("TileSetAtlasSource_d1jbf")
-sources/1 = SubResource("TileSetAtlasSource_hi2wx")
+sources/0 = SubResource("TileSetAtlasSource_hi2wx")
+sources/1 = SubResource("TileSetAtlasSource_1xjbt")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hi2wx"]
 size = Vector2(2530, 24)

@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://ds21ojkxc85p8"]
 
-[ext_resource type="Texture2D" uid="uid://dfi7w7w42tvf7" path="res://Level design/ChatGPT Image Jun 17, 2025, 01_17_04 PM.png" id="1_7mkle"]
+[ext_resource type="Texture2D" uid="uid://cwnxuhlpjxwx4" path="res://Level design/InisdePyramidLvlFinished.png" id="1_7mkle"]
 
 [node name="FirstLevelComplete" type="Control"]
 layout_mode = 3
@@ -10,6 +10,9 @@ offset_bottom = 40.0
 
 [node name="Background" type="TextureRect" parent="."]
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_left = 1.0
+offset_top = 2.0
+offset_right = 1154.0
+offset_bottom = 649.0
 texture = ExtResource("1_7mkle")
+expand_mode = 3
