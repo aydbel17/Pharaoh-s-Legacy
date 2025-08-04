@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://ds21ojkxc85p8"]
 
 [ext_resource type="Texture2D" uid="uid://cwnxuhlpjxwx4" path="res://Level design/InisdePyramidLvlFinished.png" id="1_7mkle"]
-[ext_resource type="Texture2D" uid="uid://bkadgj2woe28h" path="res://Level design/NEXTLEVELBETTER.png" id="2_7pcp0"]
+[ext_resource type="Texture2D" uid="uid://bb47gg63q5wd5" path="res://Level design/nEXTLEVEL.png" id="2_7pcp0"]
 
 [node name="FirstLevelComplete" type="Control"]
 layout_mode = 3
@@ -15,15 +15,15 @@ layout_mode = 0
 offset_left = -820.0
 offset_top = -1.0
 offset_right = 332.0
-offset_bottom = 648.0
+offset_bottom = 647.0
 texture = ExtResource("1_7mkle")
 expand_mode = 3
 
 [node name="Button" type="Button" parent="."]
 layout_mode = 0
-offset_left = -592.0
-offset_top = 280.0
-offset_right = 126.0
-offset_bottom = 469.0
+offset_left = -489.0
+offset_top = 285.0
+offset_right = -60.0
+offset_bottom = 436.0
 icon = ExtResource("2_7pcp0")
 icon_alignment = 1
