@@ -1,7 +1,10 @@
-[gd_scene load_steps=3 format=3 uid="uid://ds21ojkxc85p8"]
+[gd_scene load_steps=6 format=3 uid="uid://ds21ojkxc85p8"]
 
 [ext_resource type="Texture2D" uid="uid://cwnxuhlpjxwx4" path="res://Level design/InisdePyramidLvlFinished.png" id="1_7mkle"]
 [ext_resource type="Texture2D" uid="uid://bb47gg63q5wd5" path="res://Level design/nEXTLEVEL.png" id="2_7pcp0"]
+[ext_resource type="Texture2D" uid="uid://nadki3jqgs0f" path="res://Level design/EXITGAME.png" id="3_gd7f7"]
+[ext_resource type="Script" uid="uid://cr2i1i6sj4wsf" path="res://Lv1_complete.gd" id="3_yvp4o"]
+[ext_resource type="Script" uid="uid://ef2lrvo57n2s" path="res://exitgame.gd" id="5_22bdk"]
 
 [node name="FirstLevelComplete" type="Control"]
 layout_mode = 3
@@ -27,3 +30,16 @@ offset_right = -60.0
 offset_bottom = 436.0
 icon = ExtResource("2_7pcp0")
 icon_alignment = 1
+script = ExtResource("3_yvp4o")
+
+[node name="Button2" type="Button" parent="."]
+layout_mode = 0
+offset_left = -502.0
+offset_top = 454.0
+offset_right = -46.0
+offset_bottom = 605.0
+icon = ExtResource("3_gd7f7")
+script = ExtResource("5_22bdk")
+
+[connection signal="pressed" from="Button" to="Button" method="_on_pressed"]
+[connection signal="pressed" from="Button2" to="Button2" method="_on_pressed"]

@@ -1,0 +1,27 @@
+[gd_scene load_steps=2 format=3 uid="uid://bdwrycs2tgndl"]
+
+[ext_resource type="Texture2D" uid="uid://dfi7w7w42tvf7" path="res://Level design/ChatGPT Image Jun 17, 2025, 01_17_04 PM.png" id="1_cjnew"]
+
+[node name="titlescreen" type="Control"]
+layout_mode = 3
+anchor_right = 1.0
+anchor_bottom = 0.995
+offset_bottom = 0.239929
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0
+
+[node name="Button2" type="Button" parent="."]
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 1536.0
+offset_bottom = 1024.0
+texture = ExtResource("1_cjnew")
